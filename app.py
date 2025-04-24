@@ -6,12 +6,13 @@ import io
 
 st.set_page_config(page_title="Análise de Rastreamento", layout="wide")
 
-st.title("📊 Sistema de Análise do Rastreamento Veicular")
+st.title("📊 Sistema de Análise Logística de Rastreamento Veicular")
 
 # Upload das planilhas
 endereco_file = st.file_uploader("Importar planilha de endereços (motoristas e coordenadores)", type=["xls", "xlsx"])
 feriado_file = st.file_uploader("Importar planilha de feriados do ano", type=["xls", "xlsx"])
 rastreamento_file = st.file_uploader("Importar planilha de rastreamento", type=["xls", "xlsx"])
+placas_file = st.file_uploader("(Opcional) Importar planilha com placas a serem analisadas", type=["xls", "xlsx"])
 
 def ler_planilha(file):
     return pd.read_excel(file)
@@ -20,6 +21,11 @@ if endereco_file and feriado_file and rastreamento_file:
     df_enderecos = ler_planilha(endereco_file)
     df_feriados = ler_planilha(feriado_file)
     df_rastreamento = ler_planilha(rastreamento_file)
+
+    if placas_file:
+        df_placas = ler_planilha(placas_file)
+        placas_filtrar = df_placas['Placa / Identificação'].astype(str).tolist()
+        df_rastreamento = df_rastreamento[df_rastreamento['Placa / Identificação'].astype(str).isin(placas_filtrar)]
 
     st.success("✅ Todas as planilhas foram importadas com sucesso!")
 

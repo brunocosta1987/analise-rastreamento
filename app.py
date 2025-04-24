@@ -106,3 +106,4 @@ if endereco_file and feriado_file and rastreamento_file:
 
 else:
     st.warning("⚠️ Por favor, importe as três planilhas para começar a análise.")
+

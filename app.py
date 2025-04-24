@@ -29,9 +29,6 @@ if endereco_file and feriado_file and rastreamento_file:
     st.subheader("🗕️ Feriados")
     st.dataframe(df_feriados)
 
-    st.subheader("🛡️ Rastreamento Original")
-    st.dataframe(df_rastreamento)
-
     feriados = pd.to_datetime(df_feriados['Data']).dt.date
 
     df_enderecos['Endereço'] = df_enderecos['Endereço'].astype(str)
@@ -77,10 +74,11 @@ if endereco_file and feriado_file and rastreamento_file:
 
     df_rastreamento['Ocorrências Encontradas'] = ocorrencias
 
-    st.subheader("📋 Rastreamento com Ocorrências")
-    st.dataframe(df_rastreamento)
-
     df_oc = df_rastreamento[df_rastreamento['Ocorrências Encontradas'] != ""].copy()
+
+    st.subheader("📋 Rastreamento com Ocorrências")
+    st.dataframe(df_oc)
+
     df_explode = df_oc.assign(ocorrencia=df_oc['Ocorrências Encontradas'].str.split("; ")).explode('ocorrencia')
 
     st.subheader("📈 Ocorrências por Tipo")
@@ -106,4 +104,3 @@ if endereco_file and feriado_file and rastreamento_file:
 
 else:
     st.warning("⚠️ Por favor, importe as três planilhas para começar a análise.")
-

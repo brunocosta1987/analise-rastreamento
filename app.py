@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, time
 import plotly.express as px
+import io
 
 st.set_page_config(page_title="Análise de Rastreamento", layout="wide")
 
@@ -25,7 +26,7 @@ if endereco_file and feriado_file and rastreamento_file:
     st.subheader("📍 Endereços")
     st.dataframe(df_enderecos)
 
-    st.subheader("🗓️ Feriados")
+    st.subheader("🗕️ Feriados")
     st.dataframe(df_feriados)
 
     st.subheader("🛡️ Rastreamento Original")
@@ -78,7 +79,7 @@ if endereco_file and feriado_file and rastreamento_file:
     df_oc = df_rastreamento[df_rastreamento['Ocorrências Encontradas'] != ""].copy()
     df_explode = df_oc.assign(ocorrencia=df_oc['Ocorrências Encontradas'].str.split("; ")).explode('ocorrencia')
 
-    st.subheader("📊 Ocorrências por Tipo")
+    st.subheader("📈 Ocorrências por Tipo")
     fig_tipo = px.histogram(df_explode, x='ocorrencia', title="Distribuição de Ocorrências", text_auto=True)
     st.plotly_chart(fig_tipo, use_container_width=True)
 
@@ -86,9 +87,15 @@ if endereco_file and feriado_file and rastreamento_file:
     fig_data = px.histogram(df_oc, x='Data', title="Ocorrências por Data", text_auto=True)
     st.plotly_chart(fig_data, use_container_width=True)
 
+    # Gerar o arquivo Excel em memória
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df_rastreamento.to_excel(writer, index=False)
+    output.seek(0)
+
     st.download_button(
         label="📅 Baixar planilha com ocorrências",
-        data=df_rastreamento.to_excel(index=False, engine='openpyxl'),
+        data=output,
         file_name="ocorrencias_rastreamento.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )

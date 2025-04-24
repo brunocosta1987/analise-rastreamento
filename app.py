@@ -7,7 +7,7 @@ import io
 st.set_page_config(page_title="Análise de Rastreamento", layout="wide")
 st.image("rastreio imagem.png", width=150)  # Altere para o nome do seu arquivo de imagem
 
-st.title("📊 Sistema de Análise Logística de Rastreamento Veicular")
+st.title("📊 Análise de Rastreamento Veicular")
 
 # Upload das planilhas
 endereco_file = st.file_uploader("Importar planilha de endereços (motoristas e coordenadores)", type=["xls", "xlsx"])

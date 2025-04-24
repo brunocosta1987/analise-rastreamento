@@ -5,6 +5,7 @@ import plotly.express as px
 import io
 
 st.set_page_config(page_title="Análise de Rastreamento", layout="wide")
+st.image("rastreio imagem.png", width=200)  # Altere para o nome do seu arquivo de imagem
 
 st.title("📊 Sistema de Análise Logística de Rastreamento Veicular")
 
